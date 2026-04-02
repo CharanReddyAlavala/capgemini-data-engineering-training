@@ -81,4 +81,4 @@ All outputs are stored in the **outputs** folder.
 - `phase2_problem_statement` → Problem description  
 - `outputs` → Output screenshots  
 - `README.md` → Project documentation  
-✅ Just copy → paste into README.md in GitHub 
+
