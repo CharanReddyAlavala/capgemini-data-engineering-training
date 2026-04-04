@@ -22,8 +22,7 @@ sales_df = sales_df.filter(col("total_amount") > 0)
 # =================================================
 # 1. DAILY SALES
 # =================================================
-daily_sales = sales_df.groupBy("sale_date") \
-    .agg(sum("total_amount").alias("total_sales"))
+daily_sales = sales_df.groupBy("sale_date").agg(sum("total_amount").alias("total_sales"))
 
 print("========= DAILY SALES =========")
 daily_sales.show()
@@ -42,10 +41,7 @@ city_wise_revenue.show()
 # =================================================
 # 3. TOP 5 CUSTOMERS
 # =================================================
-top_customers = data.groupBy("customer_id") \
-    .agg(sum("total_amount").alias("total_spend")) \
-    .orderBy(col("total_spend").desc()) \
-    .limit(5)
+top_customers = data.groupBy("customer_id").agg(sum("total_amount").alias("total_spend")).orderBy(col("total_spend").desc()).limit(5)
 
 print("========= TOP 5 CUSTOMERS =========")
 top_customers.show()
@@ -53,9 +49,7 @@ top_customers.show()
 # =================================================
 # 4. REPEAT CUSTOMERS (>1 ORDER)
 # =================================================
-repeat_customers = sales_df.groupBy("customer_id") \
-    .agg(count("*").alias("order_count")) \
-    .filter(col("order_count") > 1)
+repeat_customers = sales_df.groupBy("customer_id").agg(count("*").alias("order_count")).filter(col("order_count") > 1)
 
 print("========= REPEAT CUSTOMERS =========")
 repeat_customers.show()
@@ -84,10 +78,7 @@ customer_name = customers_df.withColumn(
     concat_ws(" ", col("first_name"), col("last_name"))
 )
 
-final_table = customer_name \
-    .join(customer_segmentation, "customer_id", "left") \
-    .join(repeat_customers, "customer_id", "left") \
-    .select("customer_name", "city", "total_spend", "order_count", "segment")
+final_table = customer_name.join(customer_segmentation, "customer_id", "left").join(repeat_customers, "customer_id", "left").select("customer_name", "city", "total_spend", "order_count", "segment")
 
 print("========= FINAL REPORT =========")
 final_table.show()
@@ -95,6 +86,4 @@ final_table.show()
 # =================================================
 # 7. SAVE OUTPUT
 # =================================================
-final_table.write.mode("overwrite") \
-    .option("header", "true") \
-    .csv('/tmp/output/report')
+final_table.write.mode("overwrite").option("header", "true").csv('/tmp/output/report')
